@@ -19,4 +19,11 @@ public class ServerCore
         _isRunning = true;
         Console.WriteLine("Server is started and waiting for client...");
     }
+
+    public void Stop()
+    {
+        _listener.Stop();
+        _isRunning = false;
+        Console.WriteLine("Server is stopped.");
+    }
 }
