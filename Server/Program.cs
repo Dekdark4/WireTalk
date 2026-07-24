@@ -3,7 +3,9 @@
 const int PORT = 11000;
 
 ServerCore server = new(PORT);
+server.Start();
 
-Console.WriteLine("Server is running on port " + PORT);
-
+Console.WriteLine("Press enter to stop the server...");
 Console.ReadLine();
+
+server.Stop();
