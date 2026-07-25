@@ -22,9 +22,12 @@ public class ServerCore
 
     public async Task AcceptClientAsynk()
     {
-        TcpClient client = await _listener.AcceptTcpClientAsync();
-        Console.WriteLine("Client connected.");
-        client.Close();
+        while (_isRunning)
+        {
+            using TcpClient client = await _listener.AcceptTcpClientAsync();
+
+            Console.WriteLine("Client connected.");
+        }
     }
 
     public void Stop()
