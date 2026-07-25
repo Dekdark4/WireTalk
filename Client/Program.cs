@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Text;
+using System.Net.Sockets;
 
 const string SERVER_IP = "127.0.0.1";
 const int SERVER_PORT = 11000;
