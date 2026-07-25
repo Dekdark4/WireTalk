@@ -18,7 +18,7 @@ Console.WriteLine($"Type {EXIT_COMMAND} to disconnect.");
 
 NetworkStream stream = client.GetStream();
 
-byte[] buffer = new byte[1024];
+Task receiveTask = ReceiveMessagesAsync(stream);
 
 while(true)
 {
@@ -41,18 +41,6 @@ while(true)
     await stream.WriteAsync(data);
 
     Console.WriteLine("Message sent.");
-
-    int bytesRead = await stream.ReadAsync(buffer);
-
-    if (bytesRead == 0)
-    {
-        Console.WriteLine("Server disconnected.");
-        break;
-    }
-
-    string response = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-    Console.WriteLine(response);
 }
 
 
