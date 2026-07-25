@@ -34,10 +34,18 @@ public class ServerCore
 
     private async Task HandleClientAsync(TcpClient client)
     {
-        Console.WriteLine("Client handling started.");
-        await Task.Delay(5000);
-        Console.WriteLine("Client handling finished.");
-        client.Close();
+        using (client)
+        {
+            Console.WriteLine("Client handling started.");
+
+            NetworkStream stream = client.GetStream();
+
+            Console.WriteLine("Client stream received.");
+
+            await Task.Delay(5000);
+
+            Console.WriteLine("Client handling finished.");
+        }
     }
 
     public void Stop()
