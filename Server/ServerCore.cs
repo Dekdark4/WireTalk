@@ -28,7 +28,7 @@ public class ServerCore
 
             Console.WriteLine("Client connected.");
 
-            await HandleClientAsync(client);
+            _ =  HandleClientAsync(client);
         }
     }
 
