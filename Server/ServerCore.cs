@@ -39,12 +39,11 @@ public class ServerCore
             Console.WriteLine("Client handling started.");
 
             NetworkStream stream = client.GetStream();
-
             byte[] buffer = new byte[1024];
 
-            Console.WriteLine("Client stream received.");
+            int bytesRead = await stream.ReadAsync(buffer);
 
-            await Task.Delay(5000);
+            Console.WriteLine($"Received {bytesRead} bytes.");
 
             Console.WriteLine("Client handling finished.");
         }
