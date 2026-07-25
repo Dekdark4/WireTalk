@@ -18,5 +18,9 @@ NetworkStream stream = client.GetStream();
 Console.Write("Message to send: ");
 string message = Console.ReadLine() ?? string.Empty;
 
+byte[] data = Encoding.UTF8.GetBytes(message);
+await stream.WriteAsync(data);
+Console.WriteLine("Message sent.");
+
 Console.WriteLine("Press enter to disconnect...");
 Console.ReadLine();
