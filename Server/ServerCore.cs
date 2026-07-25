@@ -94,7 +94,7 @@ public class ServerCore
         }
     }
 
-    private async Task BroadcastAsync(string message)
+    private async Task BroadcastAsync(ClientConnection sender, string message)
     {
         byte[] data = Encoding.UTF8.GetBytes(message);
 
