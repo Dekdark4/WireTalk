@@ -20,14 +20,24 @@ public class ServerCore
         Console.WriteLine("Server is started and waiting for client...");
     }
 
-    public async Task AcceptClientAsynk()
+    public async Task AcceptClientsAsync()
     {
         while (_isRunning)
         {
-            using TcpClient client = await _listener.AcceptTcpClientAsync();
+            TcpClient client = await _listener.AcceptTcpClientAsync();
 
             Console.WriteLine("Client connected.");
+
+            await HandleClientAsync(client);
         }
+    }
+
+    private async Task HandleClientAsync(TcpClient client)
+    {
+        Console.WriteLine("Client handling started.");
+        await Task.Delay(5000);
+        Console.WriteLine("Client handling finished.");
+        client.Close();
     }
 
     public void Stop()
