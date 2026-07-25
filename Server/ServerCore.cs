@@ -40,6 +40,8 @@ public class ServerCore
 
             NetworkStream stream = client.GetStream();
 
+            byte[] buffer = new byte[1024];
+
             Console.WriteLine("Client stream received.");
 
             await Task.Delay(5000);
