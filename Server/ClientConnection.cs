@@ -8,6 +8,8 @@ public sealed class ClientConnection : IDisposable
 
     public NetworkStream Stream { get; }
 
+    public string Username { get; set; } = "Unknown";
+
     public ClientConnection(TcpClient client)
     {
         Client = client;
