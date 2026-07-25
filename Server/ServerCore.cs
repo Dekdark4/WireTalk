@@ -92,8 +92,23 @@ public class ServerCore
 
             Console.WriteLine("Client disconnected.");
         }
+    }
 
-        
+    private async Task BroadcastAsync(string message)
+    {
+        byte[] data = Encoding.UTF8.GetBytes(message);
+
+        List<ClientConnection> connectionsSnapshot;
+
+        lock(_connectionsLock)
+        {
+            connectionsSnapshot = new List<ClientConnection>(_connections);
+        }
+
+        foreach (ClientConnection connection in connectionsSnapshot)
+        {
+            await connection.Stream.WriteAsync(data);
+        }
     }
 
     public void Stop()
