@@ -7,6 +7,8 @@ namespace Server;
 public class ServerCore
 {
     private readonly TcpListener _listener;
+    private readonly List<ClientConnection> _connections = new();
+    private readonly object _connectionsLock = new();
     private bool _isRunning;
 
     public ServerCore(int port)
@@ -29,6 +31,11 @@ public class ServerCore
 
             ClientConnection connection = new ClientConnection(client);
 
+            lock (_connectionsLock)
+            {
+                _connections.Add(connection);
+            }
+
             Console.WriteLine("Client connected.");
 
             _ = HandleClientAsync(connection);
@@ -37,36 +44,56 @@ public class ServerCore
 
     private async Task HandleClientAsync(ClientConnection connection)
     {
-        using (connection)
+        try
         {
-            Console.WriteLine("Client handling started.");
-
-            byte[] buffer = new byte[1024];
-
-            while (true)
+            using (connection)
             {
-                int bytesRead = await connection.Stream.ReadAsync(buffer);
+                Console.WriteLine("Client handling started.");
 
-                if (bytesRead == 0)
+                byte[] buffer = new byte[1024];
+
+                while (true)
                 {
-                    break;
+                    int bytesRead = await connection.Stream.ReadAsync(buffer);
+
+                    if (bytesRead == 0)
+                    {
+                        break;
+                    }
+
+                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+                    Console.WriteLine($"Received {bytesRead} bytes.");
+                    Console.WriteLine($"Client message: {message}");
+
+
+                    string response = $"Server received: {message}";
+
+                    byte[] responseData = Encoding.UTF8.GetBytes(response);
+
+                    await connection.Stream.WriteAsync(responseData);
                 }
-
-                string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-
-                Console.WriteLine($"Received {bytesRead} bytes.");
-                Console.WriteLine($"Client message: {message}");
-
-
-                string response = $"Server received: {message}";
-
-                byte[] responseData = Encoding.UTF8.GetBytes(response);
-
-                await connection.Stream.WriteAsync(responseData);
+            }
+        }
+        catch (IOException exception)
+        {
+            Console.WriteLine($"Client connection error: {exception.Message}");
+        }
+        catch (SocketException exception)
+        {
+            Console.WriteLine($"Socket error: {exception.Message}");
+        }
+        finally
+        {
+            lock (_connectionsLock)
+            {
+                _connections.Remove(connection);
             }
 
             Console.WriteLine("Client disconnected.");
         }
+
+        
     }
 
     public void Stop()
