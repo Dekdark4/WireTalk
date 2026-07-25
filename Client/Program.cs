@@ -42,5 +42,5 @@ while(true)
 }
 
 
-Console.WriteLine("Press enter to disconnect...");
+Console.WriteLine("Disconnected.");
 Console.ReadLine();
