@@ -44,8 +44,11 @@ while(true)
 }
 
 
+client.Client.Shutdown(SocketShutdown.Send);
+
+await receiveTask;
+
 Console.WriteLine("Disconnected.");
-Console.ReadLine();
 
 static async Task ReceiveMessagesAsync(NetworkStream stream)
 {
