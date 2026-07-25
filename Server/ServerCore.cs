@@ -27,24 +27,25 @@ public class ServerCore
         {
             TcpClient client = await _listener.AcceptTcpClientAsync();
 
+            ClientConnection connection = new ClientConnection(client);
+
             Console.WriteLine("Client connected.");
 
-            _ =  HandleClientAsync(client);
+            _ = HandleClientAsync(connection);
         }
     }
 
-    private async Task HandleClientAsync(TcpClient client)
+    private async Task HandleClientAsync(ClientConnection connection)
     {
-        using (client)
+        using (connection)
         {
             Console.WriteLine("Client handling started.");
 
-            NetworkStream stream = client.GetStream();
             byte[] buffer = new byte[1024];
 
-            while(true)
+            while (true)
             {
-                int bytesRead = await stream.ReadAsync(buffer);
+                int bytesRead = await connection.Stream.ReadAsync(buffer);
 
                 if (bytesRead == 0)
                 {
@@ -61,7 +62,7 @@ public class ServerCore
 
                 byte[] responseData = Encoding.UTF8.GetBytes(response);
 
-                await stream.WriteAsync(responseData);
+                await connection.Stream.WriteAsync(responseData);
             }
 
             Console.WriteLine("Client disconnected.");
