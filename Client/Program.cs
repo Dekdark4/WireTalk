@@ -13,5 +13,9 @@ await client.ConnectAsync(SERVER_IP, SERVER_PORT);
 
 Console.WriteLine("Connected to server.");
 
+NetworkStream stream = client.GetStream();
+Console.Write("Message to send: ");
+string message = Console.ReadLine() ?? string.Empty;
+
 Console.WriteLine("Press enter to disconnect...");
 Console.ReadLine();
