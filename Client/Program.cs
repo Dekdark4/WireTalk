@@ -58,3 +58,26 @@ while(true)
 
 Console.WriteLine("Disconnected.");
 Console.ReadLine();
+
+static async Task ReceiveMessagesAsync(NetworkStream stream)
+{
+    byte[] buffer = new byte[1024];
+
+    while (true)
+    {
+        int bytesRead = await stream.ReadAsync(buffer);
+
+        if (bytesRead == 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Server disconnected.");
+            break;
+        }
+
+        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
+        Console.WriteLine();
+        Console.WriteLine($"Received: {message}");
+        Console.Write("Message to send: ");
+    }
+}
