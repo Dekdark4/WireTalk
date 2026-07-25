@@ -44,7 +44,10 @@ public class ServerCore
 
             int bytesRead = await stream.ReadAsync(buffer);
 
+            string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+
             Console.WriteLine($"Received {bytesRead} bytes.");
+            Console.WriteLine($"Client message: {message}");
 
             Console.WriteLine("Client handling finished.");
         }
