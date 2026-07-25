@@ -20,6 +20,13 @@ public class ServerCore
         Console.WriteLine("Server is started and waiting for client...");
     }
 
+    public async Task AcceptClientAsynk()
+    {
+        TcpClient client = await _listener.AcceptTcpClientAsync();
+        Console.WriteLine("Client connected.");
+        client.Close();
+    }
+
     public void Stop()
     {
         _listener.Stop();
