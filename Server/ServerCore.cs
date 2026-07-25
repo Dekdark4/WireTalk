@@ -42,14 +42,22 @@ public class ServerCore
             NetworkStream stream = client.GetStream();
             byte[] buffer = new byte[1024];
 
-            int bytesRead = await stream.ReadAsync(buffer);
+            while(true)
+            {
+                int bytesRead = await stream.ReadAsync(buffer);
 
-            string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                if (bytesRead == 0)
+                {
+                    break;
+                }
 
-            Console.WriteLine($"Received {bytesRead} bytes.");
-            Console.WriteLine($"Client message: {message}");
+                string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
-            Console.WriteLine("Client handling finished.");
+                Console.WriteLine($"Received {bytesRead} bytes.");
+                Console.WriteLine($"Client message: {message}");
+            }
+
+            Console.WriteLine("Client disconnected.");
         }
     }
 
