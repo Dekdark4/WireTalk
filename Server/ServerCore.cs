@@ -55,6 +55,13 @@ public class ServerCore
 
                 Console.WriteLine($"Received {bytesRead} bytes.");
                 Console.WriteLine($"Client message: {message}");
+
+
+                string response = $"Server received: {message}";
+
+                byte[] responseData = Encoding.UTF8.GetBytes(response);
+
+                await stream.WriteAsync(responseData);
             }
 
             Console.WriteLine("Client disconnected.");
